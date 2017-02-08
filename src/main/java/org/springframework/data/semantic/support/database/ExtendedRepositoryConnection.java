@@ -15,19 +15,19 @@
  */
 package org.springframework.data.semantic.support.database;
 
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.base.RepositoryConnectionWrapper;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.base.RepositoryConnectionWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ExtendedRepositoryConnection extends RepositoryConnectionWrapper {
-	private SesameConnectionPool connectionPool;
+	private Rdf4jConnectionPool connectionPool;
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private StackTraceElement[] cause;
 	
-	public ExtendedRepositoryConnection(SesameConnectionPool connectionPool, Repository repository, RepositoryConnection connection){
+	public ExtendedRepositoryConnection(Rdf4jConnectionPool connectionPool, Repository repository, RepositoryConnection connection){
 		super(repository, connection);
 		this.connectionPool = connectionPool;
 	}

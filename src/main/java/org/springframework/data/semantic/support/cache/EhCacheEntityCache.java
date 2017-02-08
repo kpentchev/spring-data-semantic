@@ -17,16 +17,16 @@ package org.springframework.data.semantic.support.cache;
 
 import java.io.Serializable;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.springframework.data.semantic.cache.EntityCache;
+import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
+import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.config.CacheConfiguration;
-
-import org.openrdf.model.URI;
-import org.springframework.data.semantic.cache.EntityCache;
-import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
-import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
 
 public class EhCacheEntityCache implements EntityCache {
 	
@@ -42,12 +42,12 @@ public class EhCacheEntityCache implements EntityCache {
 	@Override
 	public <T> void remove(T entity) {
 		Ehcache cache = getCache(entity.getClass());
-		cache.remove(getId(entity).toString());
+		cache.remove(getId(entity).stringValue());
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T get(URI id, Class<? extends T> clazz) {
+	public <T> T get(IRI id, Class<? extends T> clazz) {
 		Ehcache cache = getCache(clazz);
 		Element element = cache.get(id.toString());
 		if(element != null){
@@ -78,7 +78,7 @@ public class EhCacheEntityCache implements EntityCache {
 		cacheManager.clearAll();
 	}
 	
-	private URI getId(Object entity){
+	private IRI getId(Object entity){
 		SemanticPersistentEntity<?> persistentEntity = mappingContext.getPersistentEntity(entity.getClass());
 		return persistentEntity.getResourceId(entity);
 	}

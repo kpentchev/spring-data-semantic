@@ -20,28 +20,27 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.impl.SimpleNamespace;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.junit.Before;
 import org.junit.Test;
-import org.openrdf.model.Literal;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.LiteralImpl;
-import org.openrdf.model.impl.NamespaceImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.model.vocabulary.RDF;
 import org.springframework.data.semantic.core.RDFState;
 import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
 import org.springframework.data.semantic.model.ModelEntity;
 import org.springframework.data.semantic.support.convert.SemanticEntityInstantiatorImpl;
 import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
+import org.springframework.data.semantic.support.util.ValueUtils;
 import org.springframework.data.util.ClassTypeInformation;
 
 public class TestEntityInstantiator {
 	
 	private RDFState state;
-	private URI id = new URIImpl("urn:default:id1");
-	private URI namePredicate = new URIImpl("http://www.w3.org/2004/02/skos/core#prefLabel");
-	private Literal name = new LiteralImpl("name");
+	private IRI id = ValueUtils.createIRI("urn:default:id1");
+	private IRI namePredicate = ValueUtils.createIRI("http://www.w3.org/2004/02/skos/core#prefLabel");
+	private Literal name = SimpleValueFactory.getInstance().createLiteral("name");
 	private SemanticEntityInstantiator instantiator = new SemanticEntityInstantiatorImpl();
 	private SemanticMappingContext mappingContext;
 	private SemanticPersistentEntity<ModelEntity> testEntityType;
@@ -50,10 +49,10 @@ public class TestEntityInstantiator {
 	@Before
 	public void setupTest(){
 		state = new RDFState();
-		mappingContext = new SemanticMappingContext(Arrays.asList(new NamespaceImpl("skos", "http://www.w3.org/2004/02/skos/core#")), new NamespaceImpl("", "urn:default:"), true);
+		mappingContext = new SemanticMappingContext(Arrays.asList(new SimpleNamespace("skos", "http://www.w3.org/2004/02/skos/core#")), new SimpleNamespace("", "urn:default:"), true);
 		testEntityType = (SemanticPersistentEntity<ModelEntity>) mappingContext.getPersistentEntity(ClassTypeInformation.from(ModelEntity.class));
-		state.addStatement(new StatementImpl(id, namePredicate, name));
-		state.addStatement(new StatementImpl(id, RDF.TYPE, testEntityType.getRDFType()));
+		state.addStatement(SimpleValueFactory.getInstance().createStatement(id, namePredicate, name));
+		state.addStatement(SimpleValueFactory.getInstance().createStatement(id, RDF.TYPE, testEntityType.getRDFType()));
 	}
 	
 	@Test

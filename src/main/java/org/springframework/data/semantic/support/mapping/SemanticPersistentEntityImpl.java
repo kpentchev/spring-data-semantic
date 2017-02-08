@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
-import org.openrdf.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.springframework.data.mapping.model.BasicPersistentEntity;
 import org.springframework.data.semantic.annotation.Namespace;
 import org.springframework.data.semantic.annotation.SemanticEntity;
@@ -44,8 +44,8 @@ import org.springframework.util.StringUtils;
 public class SemanticPersistentEntityImpl<T> extends BasicPersistentEntity<T, SemanticPersistentProperty> implements SemanticPersistentEntity<T>{
 	private SemanticPersistentProperty contextProperty;
 	private SemanticMappingContext mappingContext;
-	private URI rdfType;
-	private URI namespace;
+	private IRI rdfType;
+	private IRI namespace;
 	private boolean hasNamespace = true;
 	private List<SemanticPersistentEntity<?>> supertypes;
 	
@@ -80,20 +80,20 @@ public class SemanticPersistentEntityImpl<T> extends BasicPersistentEntity<T, Se
 	}
 
 	@Override
-	public URI getRDFType() {
+	public IRI getRDFType() {
 		if(rdfType == null) {
 			SemanticEntity seAnnotation = getType().getAnnotation(SemanticEntity.class);
 			String type = seAnnotation.rdfType();
 			if(StringUtils.hasText(type)){
-				rdfType = mappingContext.resolveURI(type);
+				rdfType = mappingContext.resolveIRI(type);
 			}
 			else{
-				URI ns = getNamespace();
+				IRI ns = getNamespace();
 				if(ns == null){
-					rdfType = mappingContext.resolveURIDefaultNS(getType().getSimpleName());
+					rdfType = mappingContext.resolveIRIDefaultNS(getType().getSimpleName());
 				}
 				else{
-					rdfType = ValueUtils.createUri(ns.stringValue(), getType().getSimpleName());
+					rdfType = ValueUtils.createIRI(ns.stringValue(), getType().getSimpleName());
 				}
 			}
 		}
@@ -102,22 +102,22 @@ public class SemanticPersistentEntityImpl<T> extends BasicPersistentEntity<T, Se
 
 	@Override
 	public void setPersistentState(Object entity, RDFState statements) {
-		URI subjectId = (URI) statements.getCurrentStatements().filter(null, RDF.TYPE, getRDFType()).subjects().iterator().next();
+		IRI subjectId = (IRI) statements.getCurrentStatements().filter(null, RDF.TYPE, getRDFType()).subjects().iterator().next();
 		setResourceId(entity, subjectId);
 	}
 
 	@Override
-	public URI getResourceId(Object entity) {
+	public IRI getResourceId(Object entity) {
 		Object value = getIdProperty().getValue(entity, null);
-		if(value instanceof URI){
-			return (URI) value;
+		if(value instanceof IRI){
+			return (IRI) value;
 		}
-		URI ns = getNamespace();
+		IRI ns = getNamespace();
 		if(ns != null){
-			return ValueUtils.createUri(ns.stringValue(), value.toString());
+			return ValueUtils.createIRI(ns.stringValue(), value.toString());
 		}
 		else{
-			return mappingContext.resolveURI(value.toString());
+			return mappingContext.resolveIRI(value.toString());
 		}
 	}
 
@@ -131,10 +131,10 @@ public class SemanticPersistentEntityImpl<T> extends BasicPersistentEntity<T, Se
 	}
 
 	@Override
-	public void setResourceId(Object entity, URI id) {
+	public void setResourceId(Object entity, IRI id) {
 		SemanticPersistentProperty idProperty = getIdProperty();
 		Class<?> propertyType = idProperty.getActualType();
-		if(URI.class.isAssignableFrom(propertyType)){
+		if(IRI.class.isAssignableFrom(propertyType)){
 			idProperty.setValue(entity, id);
 		}
 		else{
@@ -143,13 +143,13 @@ public class SemanticPersistentEntityImpl<T> extends BasicPersistentEntity<T, Se
 	}
 
 	@Override
-	public URI getNamespace() {
+	public IRI getNamespace() {
 		if(namespace == null && hasNamespace) {
 			Namespace nsAnnotation = getType().getAnnotation(Namespace.class);
 			if(nsAnnotation != null){
 				String ns = nsAnnotation.namespace();
 				if(StringUtils.hasText(ns)){
-					namespace = ValueUtils.createUri(ns);
+					namespace = ValueUtils.createIRI(ns);
 				}
 			}
 			else{
@@ -168,12 +168,12 @@ public class SemanticPersistentEntityImpl<T> extends BasicPersistentEntity<T, Se
 	}
 
 	@Override
-	public List<URI> getRDFSuperTypes() {
-		List<URI> superTypeURIs = new ArrayList<URI>(this.supertypes.size());
+	public List<IRI> getRDFSuperTypes() {
+		List<IRI> superTypeIRIs = new ArrayList<IRI>(this.supertypes.size());
 		for(SemanticPersistentEntity<?> persistentEntity : this.supertypes){
-			superTypeURIs.add(persistentEntity.getRDFType());
+			superTypeIRIs.add(persistentEntity.getRDFType());
 		}
-		return superTypeURIs;
+		return superTypeIRIs;
 	}
 
 }

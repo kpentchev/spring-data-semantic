@@ -22,11 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.ehcache.CacheManager;
-
-import org.openrdf.model.Model;
-import org.openrdf.model.URI;
-import org.openrdf.repository.RepositoryException;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -58,6 +56,8 @@ import org.springframework.data.semantic.support.convert.access.DelegatingFieldA
 import org.springframework.data.semantic.support.convert.access.listener.DelegatingFieldAccessListenerFactory;
 import org.springframework.data.semantic.support.convert.state.SemanticEntityStateFactory;
 import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
+
+import net.sf.ehcache.CacheManager;
 
 public class SemanticTemplateCRUD implements SemanticOperationsCRUD, InitializingBean, ApplicationContextAware {
 	//private static final Logger LOGGER = LoggerFactory.getLogger(SemanticTemplate.class);
@@ -188,7 +188,7 @@ public class SemanticTemplateCRUD implements SemanticOperationsCRUD, Initializin
 		lazyInit();
 		@SuppressWarnings("unchecked")
 		SemanticPersistentEntity<T> persistentEntity = (SemanticPersistentEntity<T>) this.mappingContext.getPersistentEntity(entity.getClass());
-		URI id = persistentEntity.getResourceId(entity);
+		IRI id = persistentEntity.getResourceId(entity);
 		Model dbState = this.statementsCollector.getStatementsForResourceOriginalPredicates(id, entity.getClass(), MappingPolicyImpl.DEFAULT_POLICY);
 		entity = this.entityPersister.persistEntity(entity, new RDFState(dbState));
 		entityCache.put(entity);
@@ -202,7 +202,7 @@ public class SemanticTemplateCRUD implements SemanticOperationsCRUD, Initializin
 		for(T entity : entities){
 			@SuppressWarnings("unchecked")
 			SemanticPersistentEntity<T> persistentEntity = (SemanticPersistentEntity<T>) this.mappingContext.getPersistentEntity(entity.getClass());
-			URI id = persistentEntity.getResourceId(entity);
+			IRI id = persistentEntity.getResourceId(entity);
 			Model dbState = this.statementsCollector.getStatementsForResourceOriginalPredicates(id, entity.getClass(), MappingPolicyImpl.DEFAULT_POLICY);
 			entityToExistingState.put(entity, new RDFState(dbState));
 		}
@@ -221,7 +221,7 @@ public class SemanticTemplateCRUD implements SemanticOperationsCRUD, Initializin
 	}
 
 	@Override
-	public <T> T find(URI resourceId, Class<? extends T> clazz) {
+	public <T> T find(IRI resourceId, Class<? extends T> clazz) {
 		lazyInit();
 		T entity = entityCache.get(resourceId, clazz);
 		if(entity == null){
@@ -253,7 +253,7 @@ public class SemanticTemplateCRUD implements SemanticOperationsCRUD, Initializin
 	}
 
 	@Override
-	public <T> boolean exists(URI resourceId, Class<? extends T> clazz) {
+	public <T> boolean exists(IRI resourceId, Class<? extends T> clazz) {
 		lazyInit();
 		T entity = entityCache.get(resourceId, clazz);
 		if(entity != null){
@@ -268,7 +268,7 @@ public class SemanticTemplateCRUD implements SemanticOperationsCRUD, Initializin
 	}
 
 	@Override
-	public <T> void delete(URI resourceId, Class<? extends T> clazz) {
+	public <T> void delete(IRI resourceId, Class<? extends T> clazz) {
 		lazyInit();
 		T entity = this.find(resourceId, clazz);
 		this.delete(entity);
@@ -328,9 +328,9 @@ public class SemanticTemplateCRUD implements SemanticOperationsCRUD, Initializin
 	@Override
 	public <T> List<T> findAll(Class<? extends T> clazz, Pageable pageRequest) {
 		lazyInit();
-		Collection<URI> ids = this.statementsCollector.getUrisForOffsetAndLimit(clazz, pageRequest.getOffset(), pageRequest.getPageSize());
+		Collection<IRI> ids = this.statementsCollector.getUrisForOffsetAndLimit(clazz, pageRequest.getOffset(), pageRequest.getPageSize());
 		List<T> entities = new ArrayList<T>(pageRequest.getPageSize());
-		for(URI id : ids){
+		for(IRI id : ids){
 			T entity = this.find(id, clazz);
 			entities.add(entity);
 		}

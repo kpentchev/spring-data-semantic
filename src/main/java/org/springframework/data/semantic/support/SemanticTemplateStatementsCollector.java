@@ -21,18 +21,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Model;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.TreeModel;
-import org.openrdf.model.vocabulary.RDF;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryInterruptedException;
-import org.openrdf.repository.RepositoryException;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.TreeModel;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.QueryInterruptedException;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.springframework.data.repository.query.QueryCreationException;
 import org.springframework.data.semantic.core.SemanticDatabase;
 import org.springframework.data.semantic.core.SemanticOperationsStatementsCollector;
@@ -69,7 +69,7 @@ public class SemanticTemplateStatementsCollector implements SemanticOperationsSt
 	@Override
 	public Model getStatementsForResourceProperty(Object entity, SemanticPersistentProperty property){
 		SemanticPersistentEntity<?> persistentEntity = getPersistentEntity(entity.getClass());
-		URI uri = persistentEntity.getResourceId(entity);
+		IRI uri = persistentEntity.getResourceId(entity);
 		try {
 			return semanticDB.getGraphQueryResults(
 				entityToQueryConverter.getGraphQueryForResourceProperty(uri, persistentEntity, property));
@@ -79,7 +79,7 @@ public class SemanticTemplateStatementsCollector implements SemanticOperationsSt
 	}	
 	
 	@Override
-	public <T> Model getStatementsForResourceOriginalPredicates(URI resource, Class<? extends T> clazz, MappingPolicy globalMappingPolicy){
+	public <T> Model getStatementsForResourceOriginalPredicates(IRI resource, Class<? extends T> clazz, MappingPolicy globalMappingPolicy){
 		try {
 			return semanticDB.getGraphQueryResults(
 					entityToQueryConverter.getGraphQueryForResourceWithOriginalPredicates(resource, getPersistentEntity(clazz), globalMappingPolicy));
@@ -89,7 +89,7 @@ public class SemanticTemplateStatementsCollector implements SemanticOperationsSt
 	}
 
 	@Override
-	public <T> Model getStatementsForResource(URI resource, Class<? extends T> clazz, MappingPolicy globalMappingPolicy) {
+	public <T> Model getStatementsForResource(IRI resource, Class<? extends T> clazz, MappingPolicy globalMappingPolicy) {
 		try {
 			return semanticDB.getGraphQueryResults(
 					entityToQueryConverter.getGraphQueryForResource(resource, getPersistentEntity(clazz), globalMappingPolicy));
@@ -127,7 +127,7 @@ public class SemanticTemplateStatementsCollector implements SemanticOperationsSt
 		}
 	}
 	
-	public <T> Collection<Model> assembleModels(URI type, Model allStatements){
+	public <T> Collection<Model> assembleModels(IRI type, Model allStatements){
 		Model subjects = allStatements.filter(null, null, type);
 		Map<Resource, Model> entityIdToModel = new HashMap<Resource, Model>();
 		for(Statement st : subjects){
@@ -182,16 +182,16 @@ public class SemanticTemplateStatementsCollector implements SemanticOperationsSt
 	}
 
 	@Override
-	public <T> Collection<URI> getUrisForOffsetAndLimit(
+	public <T> Collection<IRI> getUrisForOffsetAndLimit(
 			Class<? extends T> clazz, Integer offset, Integer limit) {
 		SemanticPersistentEntity<?> persistentEntity = mappingContext.getPersistentEntity(clazz);
-		List<URI> ids = new ArrayList<URI>(limit);
+		List<IRI> ids = new ArrayList<IRI>(limit);
 		try {
 			List<BindingSet> results = semanticDB.getQueryResults(entityToQueryConverter.getQueryForIds(persistentEntity, offset, limit));
 			for(BindingSet result : results){
 				Value id = result.getValue("id");
-				if(id instanceof URI){
-					ids.add((URI) id);
+				if(id instanceof IRI){
+					ids.add((IRI) id);
 				}
 			}
 		} catch (QueryInterruptedException e) {

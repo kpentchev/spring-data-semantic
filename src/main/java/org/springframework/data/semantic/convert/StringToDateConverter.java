@@ -17,7 +17,7 @@ package org.springframework.data.semantic.convert;
 
 import java.util.Date;
 
-import org.openrdf.model.datatypes.XMLDatatypeUtil;
+import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.StringUtils;
 

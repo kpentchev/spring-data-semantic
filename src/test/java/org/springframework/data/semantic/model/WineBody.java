@@ -15,7 +15,7 @@
  */
 package org.springframework.data.semantic.model;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.annotation.Predicate;
 import org.springframework.data.semantic.annotation.ResourceId;
 import org.springframework.data.semantic.annotation.SemanticEntity;
@@ -24,16 +24,16 @@ import org.springframework.data.semantic.annotation.SemanticEntity;
 public class WineBody {
 	
 	@ResourceId
-	private URI uri;
-	
+	private IRI uri;
+		
 	@Predicate("http://www.w3.org/2000/01/rdf-schema#label")
 	private String label;
 	
-	public void setUri(URI uri) {
+	public void setUri(IRI uri) {
 		this.uri = uri;
 	}
 	
-	public URI getUri() {
+	public IRI getUri() {
 		return uri;
 	}
 	

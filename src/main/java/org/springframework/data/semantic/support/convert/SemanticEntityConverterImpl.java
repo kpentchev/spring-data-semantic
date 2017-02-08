@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
@@ -159,20 +159,20 @@ public class SemanticEntityConverterImpl implements SemanticEntityConverter {
 				SemanticPersistentEntity<Object> associatedPersistentEntity = (SemanticPersistentEntity<Object>) mappingContext.getPersistentEntity(property.getTypeInformation().getActualType());
             	Set<? extends Value> associatedEntityIds;
             	if(Direction.INCOMING.equals(property.getDirection())){
-            		associatedEntityIds = source.getCurrentStatements().filter(null, ValueUtils.createUri(property.getInverseProperty().getAliasPredicate()), persistentEntity.getResourceId(entity)).subjects();
+            		associatedEntityIds = source.getCurrentStatements().filter(null, ValueUtils.createIRI(property.getInverseProperty().getAliasPredicate()), persistentEntity.getResourceId(entity)).subjects();
             	}
             	else{
-            		associatedEntityIds = source.getCurrentStatements().filter(persistentEntity.getResourceId(entity), ValueUtils.createUri(property.getAliasPredicate()), null).objects();
+            		associatedEntityIds = source.getCurrentStatements().filter(persistentEntity.getResourceId(entity), ValueUtils.createIRI(property.getAliasPredicate()), null).objects();
             	}
             	if (property.getTypeInformation().isCollectionLike()) {
             		List<Object> associationValuesList = new LinkedList<Object>();
             		for(Value associatedEntityId : associatedEntityIds){
-                		if(associatedEntityId instanceof URI){
-                			URI associatedEntityURI = (URI) associatedEntityId;
-                			Object associatedEntity = entityInstantiator.createInstance(associatedPersistentEntity, (URI) associatedEntityId);
+                		if(associatedEntityId instanceof IRI){
+                			IRI associatedEntityIRI = (IRI) associatedEntityId;
+                			Object associatedEntity = entityInstantiator.createInstance(associatedPersistentEntity, (IRI) associatedEntityId);
                 			associationValuesList.add(associatedEntity);
                 			if (mappingPolicy.shouldCascade(Cascade.GET)) {
-                                RDFState associatedEntityState = new RDFState(source.getCurrentStatements().filter(associatedEntityURI, null, null));
+                                RDFState associatedEntityState = new RDFState(source.getCurrentStatements().filter(associatedEntityIRI, null, null));
                                 final BeanWrapper<Object> associatedWrapper = BeanWrapper.<Object>create(associatedEntity, conversionService);
                                 sourceStateTransmitter.copyPropertiesFrom(associatedWrapper, associatedEntityState, associatedPersistentEntity, mappingPolicy);
                                 cascadeFetch(associatedEntity, associatedPersistentEntity, associatedWrapper, source);
@@ -183,10 +183,10 @@ public class SemanticEntityConverterImpl implements SemanticEntityConverter {
             	}
             	else{
             		if(!associatedEntityIds.isEmpty()){
-            			URI associatedEntityURI = (URI) associatedEntityIds.iterator().next();
-            			Object associatedEntity = entityInstantiator.createInstance(associatedPersistentEntity, associatedEntityURI);
+            			IRI associatedEntityIRI = (IRI) associatedEntityIds.iterator().next();
+            			Object associatedEntity = entityInstantiator.createInstance(associatedPersistentEntity, associatedEntityIRI);
             			if (mappingPolicy.shouldCascade(Cascade.GET)) {
-            				 RDFState associatedEntityState = new RDFState(source.getCurrentStatements().filter(associatedEntityURI, null, null));
+            				 RDFState associatedEntityState = new RDFState(source.getCurrentStatements().filter(associatedEntityIRI, null, null));
                              final BeanWrapper<Object> associatedWrapper = BeanWrapper.<Object>create(associatedEntity, conversionService);
                              sourceStateTransmitter.copyPropertiesFrom(associatedWrapper, associatedEntityState, associatedPersistentEntity, mappingPolicy);
                              cascadeFetch(associatedEntity, associatedPersistentEntity, associatedWrapper, source);

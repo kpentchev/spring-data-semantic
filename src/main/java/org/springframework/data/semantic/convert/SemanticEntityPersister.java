@@ -17,8 +17,8 @@ package org.springframework.data.semantic.convert;
 
 import java.util.Map;
 
-import org.openrdf.model.Statement;
-import org.openrdf.query.GraphQueryResult;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.query.GraphQueryResult;
 import org.springframework.data.semantic.core.RDFState;
 
 

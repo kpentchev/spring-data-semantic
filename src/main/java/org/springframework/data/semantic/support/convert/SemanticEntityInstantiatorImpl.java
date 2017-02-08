@@ -15,7 +15,7 @@
  */
 package org.springframework.data.semantic.support.convert;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.convert.EntityInstantiator;
 import org.springframework.data.convert.ReflectionEntityInstantiator;
 import org.springframework.data.semantic.convert.SemanticEntityInstantiator;
@@ -35,7 +35,7 @@ public class SemanticEntityInstantiatorImpl implements SemanticEntityInstantiato
 	}
 
 	@Override
-	public <T> T createInstance(SemanticPersistentEntity<T> entity, URI id) {
+	public <T> T createInstance(SemanticPersistentEntity<T> entity, IRI id) {
 		T instance = instantiator.createInstance(entity, null);
 		entity.setResourceId(instance, id);
 		return instance;

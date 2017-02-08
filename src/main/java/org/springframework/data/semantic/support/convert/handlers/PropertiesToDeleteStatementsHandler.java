@@ -15,12 +15,10 @@
  */
 package org.springframework.data.semantic.support.convert.handlers;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.ContextStatementImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.springframework.data.semantic.core.RDFState;
 import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
 import org.springframework.data.semantic.mapping.SemanticPersistentProperty;
@@ -31,7 +29,7 @@ import org.springframework.data.semantic.support.util.ValueUtils;
 
 public class PropertiesToDeleteStatementsHandler extends AbstractPropertiesToStatementsHandlers {
 
-	private URI resourceId;
+	private IRI resourceId;
 	
 	public PropertiesToDeleteStatementsHandler(RDFState statements, Object entity, SemanticMappingContext mappingContext){
 		super(statements, entity, mappingContext);
@@ -48,18 +46,18 @@ public class PropertiesToDeleteStatementsHandler extends AbstractPropertiesToSta
 		}
 		else if(persistentProperty.isIdProperty()){
 			if(persistentEntity.hasContextProperty() && persistentEntity.getContextProperty().getValue(entity, persistentProperty.getMappingPolicy()) != null){
-				statements.deleteStatement(new ContextStatementImpl((URI) value, new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), persistentEntity.getRDFType(), (Resource) persistentEntity.getContextProperty().getValue(entity, persistentProperty.getMappingPolicy())));
+				statements.deleteStatement(SimpleValueFactory.getInstance().createStatement((IRI) value, ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), persistentEntity.getRDFType(), (Resource) persistentEntity.getContextProperty().getValue(entity, persistentProperty.getMappingPolicy())));
 			}
 			else{
-				statements.deleteStatement(new StatementImpl(this.resourceId, new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), persistentEntity.getRDFType()));
+				statements.deleteStatement(SimpleValueFactory.getInstance().createStatement(this.resourceId, ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), persistentEntity.getRDFType()));
 			}
 		}
 		else{
 			if(persistentEntity.hasContextProperty() && persistentEntity.getContextProperty().getValue(entity, persistentProperty.getMappingPolicy()) != null){
-				statements.deleteStatement(new ContextStatementImpl(resourceId, persistentProperty.getPredicate(), objectToLiteralConverter.convert(value), (Resource) persistentEntity.getContextProperty().getValue(entity, persistentProperty.getMappingPolicy())));
+				statements.deleteStatement(SimpleValueFactory.getInstance().createStatement(resourceId, persistentProperty.getPredicate(), objectToLiteralConverter.convert(value), (Resource) persistentEntity.getContextProperty().getValue(entity, persistentProperty.getMappingPolicy())));
 			}
 			else{
-				statements.deleteStatement(new StatementImpl(resourceId, persistentProperty.getPredicate(), objectToLiteralConverter.convert(value)));	
+				statements.deleteStatement(SimpleValueFactory.getInstance().createStatement(resourceId, persistentProperty.getPredicate(), objectToLiteralConverter.convert(value)));	
 			}
 		}
 		
@@ -100,12 +98,12 @@ public class PropertiesToDeleteStatementsHandler extends AbstractPropertiesToSta
 		//TODO
 	}
 	
-	private void deleteStatement(Resource subject, URI predicate, Value object, Resource context){
+	private void deleteStatement(Resource subject, IRI predicate, Value object, Resource context){
 		if(context == null){
-			statements.deleteStatement(new StatementImpl(subject, predicate, object));
+			statements.deleteStatement(SimpleValueFactory.getInstance().createStatement(subject, predicate, object));
 		}
 		else{
-			statements.deleteStatement(new ContextStatementImpl(subject, predicate, object, context));
+			statements.deleteStatement(SimpleValueFactory.getInstance().createStatement(subject, predicate, object, context));
 		}
 	}
 	

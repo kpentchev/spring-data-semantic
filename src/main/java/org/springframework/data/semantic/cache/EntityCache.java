@@ -15,13 +15,13 @@
  */
 package org.springframework.data.semantic.cache;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 
 public interface EntityCache {
 	
 	<T> void remove(T entity);
 	
-	<T> T get(URI id, Class<? extends T> clazz);
+	<T> T get(IRI id, Class<? extends T> clazz);
 	
 	<T> void put(T entity);
 	

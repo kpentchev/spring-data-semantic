@@ -20,18 +20,18 @@ import static org.junit.Assert.assertEquals;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.impl.SimpleNamespace;
 import org.junit.Test;
-import org.openrdf.model.Namespace;
-import org.openrdf.model.impl.NamespaceImpl;
-import org.openrdf.model.impl.URIImpl;
 import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
 import org.springframework.data.semantic.mapping.SemanticPersistentProperty;
 import org.springframework.data.semantic.model.NamespaceEntity;
 import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
+import org.springframework.data.semantic.support.util.ValueUtils;
 
 public class TestNamespaceAnnotation {
 	
-	private SemanticMappingContext mappingContext = new SemanticMappingContext((List<? extends Namespace>) new LinkedList<Namespace>(), new NamespaceImpl("", "urn:default:namespace:"), true);
+	private SemanticMappingContext mappingContext = new SemanticMappingContext((List<? extends Namespace>) new LinkedList<Namespace>(), new SimpleNamespace("", "urn:default:namespace:"), true);
 	
 	@SuppressWarnings("unchecked")
 	private SemanticPersistentEntity<NamespaceEntity> pe = (SemanticPersistentEntity<NamespaceEntity>) mappingContext.getPersistentEntity(NamespaceEntity.class);
@@ -51,16 +51,16 @@ public class TestNamespaceAnnotation {
 
 	@Test
 	public void testAbsolutePredicate() {
-		// make sure @Predicate() annotations with absolute URI stay absolute and the same
+		// make sure @Predicate() annotations with absolute IRI stay absolute and the same
 		assertEquals(
-				new URIImpl("urn:really:absolute"),
+				ValueUtils.createIRI("urn:really:absolute"),
 				pe.getPersistentProperty("withAbsolutePredicate").getPredicate());
 	}
 
 	@Test
 	public void testRelativePredicate() {
 		assertEquals(
-				new URIImpl(namespace + "relative"),
+				ValueUtils.createIRI(namespace + "relative"),
 				pe.getPersistentProperty("withRelativePredicate").getPredicate());
 	}
 }

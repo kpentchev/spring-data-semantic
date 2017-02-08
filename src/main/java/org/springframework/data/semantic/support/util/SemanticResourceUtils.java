@@ -18,13 +18,13 @@ package org.springframework.data.semantic.support.util;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.support.model.SemanticResource;
 
 public class SemanticResourceUtils {
 	
-	public static List<URI> extractResourceIds(Iterable<? extends SemanticResource> resources){
-		List<URI> ids = new LinkedList<URI>();
+	public static List<IRI> extractResourceIds(Iterable<? extends SemanticResource> resources){
+		List<IRI> ids = new LinkedList<IRI>();
 		for(SemanticResource resource : resources){
 			ids.add(resource.getId());
 		}

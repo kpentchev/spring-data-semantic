@@ -17,7 +17,7 @@ package org.springframework.data.semantic.core;
 
 import javax.annotation.PreDestroy;
 
-import org.openrdf.repository.Repository;
+import org.eclipse.rdf4j.repository.Repository;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.util.StringUtils;
 

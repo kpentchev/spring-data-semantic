@@ -15,20 +15,20 @@
  */
 package org.springframework.data.semantic.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.impl.LinkedHashModel;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openrdf.model.Model;
-import org.openrdf.model.Namespace;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.LinkedHashModel;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.query.BindingSet;
-import org.openrdf.repository.RepositoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.semantic.support.util.ValueUtils;
 import org.springframework.data.semantic.testutils.Utils;
@@ -84,7 +84,7 @@ public class SemanticDatabaseTest {
 	@Test
 	public void testAddStatement(){
 		long count = sdb.count();
-		sdb.addStatement(new URIImpl("urn:test:statement"), new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), new URIImpl("unr:type:test-statement"));
+		sdb.addStatement(ValueUtils.createIRI("urn:test:statement"),ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), ValueUtils.createIRI("unr:type:test-statement"));
 		assertEquals(count+1, sdb.count());
 	}
 	
@@ -92,15 +92,15 @@ public class SemanticDatabaseTest {
 	public void testAddStatements(){
 		long count = sdb.count();
 		Model model = new LinkedHashModel();
-		model.add(new URIImpl("urn:test:statement1"), new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), new URIImpl("unr:type:test-statement"));
-		model.add(new URIImpl("urn:test:statement2"), new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), new URIImpl("unr:type:test-statement"));
+		model.add(ValueUtils.createIRI("urn:test:statement1"), ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), ValueUtils.createIRI("unr:type:test-statement"));
+		model.add(ValueUtils.createIRI("urn:test:statement2"), ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), ValueUtils.createIRI("unr:type:test-statement"));
 		sdb.addStatements(model);
 		assertEquals(count+2, sdb.count());
 	}
 	
 	@Test
 	public void testDeleteStatements(){
-		URI uri = new URIImpl("urn:test:statement2");
+		IRI uri = ValueUtils.createIRI("urn:test:statement2");
 		sdb.removeStatements(uri, null, null);
 		assertTrue(sdb.getStatementsForSubject(uri).isEmpty());
 	}

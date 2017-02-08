@@ -19,14 +19,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.impl.SimpleNamespace;
 import org.junit.Test;
-import org.openrdf.model.Namespace;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.NamespaceImpl;
-import org.openrdf.model.impl.URIImpl;
 import org.springframework.data.semantic.annotation.ResourceId;
 import org.springframework.data.semantic.annotation.SemanticEntity;
 import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
+import org.springframework.data.semantic.support.util.ValueUtils;
 
 public class TestStringSemanticPersistentEntity {
 	
@@ -36,7 +36,7 @@ public class TestStringSemanticPersistentEntity {
 	
 	private static final String id = "one";
 	
-	private SemanticMappingContext mappingContext = new SemanticMappingContext(new ArrayList<Namespace>(0), new NamespaceImpl("", defaultNS), true);
+	private SemanticMappingContext mappingContext = new SemanticMappingContext(new ArrayList<Namespace>(0), new SimpleNamespace("", defaultNS), true);
 	
 	@Test
 	@SuppressWarnings("unchecked")
@@ -46,7 +46,7 @@ public class TestStringSemanticPersistentEntity {
 		StringIdEntity instance = new StringIdEntity();
 		instance.setId(id);
 		
-		URI uri = persistentEntity.getResourceId(instance);
+		IRI uri = persistentEntity.getResourceId(instance);
 		
 		assertEquals(defaultNS+id, uri.toString());
 	}
@@ -59,7 +59,7 @@ public class TestStringSemanticPersistentEntity {
 		StringNamespaceIdEntity instance = new StringNamespaceIdEntity();
 		instance.setId(id);
 		
-		URI uri = persistentEntity.getResourceId(instance);
+		IRI uri = persistentEntity.getResourceId(instance);
 		
 		assertEquals(customNS+id, uri.toString());
 	}
@@ -69,7 +69,7 @@ public class TestStringSemanticPersistentEntity {
 	public void testSetId(){
 		SemanticPersistentEntity<StringIdEntity> persistentEntity = (SemanticPersistentEntity<StringIdEntity>) mappingContext.getPersistentEntity(StringIdEntity.class);
 		StringIdEntity instance = new StringIdEntity();
-		persistentEntity.setResourceId(instance, new URIImpl(defaultNS+id));
+		persistentEntity.setResourceId(instance, ValueUtils.createIRI(defaultNS+id));
 		
 		assertEquals(id, instance.getId());
 	}
@@ -79,7 +79,7 @@ public class TestStringSemanticPersistentEntity {
 	public void testSetNamespaceId(){
 		SemanticPersistentEntity<StringNamespaceIdEntity> persistentEntity = (SemanticPersistentEntity<StringNamespaceIdEntity>) mappingContext.getPersistentEntity(StringNamespaceIdEntity.class);
 		StringNamespaceIdEntity instance = new StringNamespaceIdEntity();
-		persistentEntity.setResourceId(instance, new URIImpl(customNS+id));
+		persistentEntity.setResourceId(instance, ValueUtils.createIRI(customNS+id));
 		
 		assertEquals(id, instance.getId());
 	}

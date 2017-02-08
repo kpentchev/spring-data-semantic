@@ -15,8 +15,8 @@
  */
 package org.springframework.data.semantic.core;
 
-import org.openrdf.model.Model;
-import org.openrdf.query.GraphQueryResult;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.query.GraphQueryResult;
 import org.springframework.data.semantic.mapping.MappingPolicy;
 
 public interface SemanticOperationsObjectCreator {
