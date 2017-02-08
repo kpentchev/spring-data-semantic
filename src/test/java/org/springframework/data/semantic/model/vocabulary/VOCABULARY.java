@@ -15,16 +15,14 @@
  */
 package org.springframework.data.semantic.model.vocabulary;
 
-import org.openrdf.model.URI;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.springframework.data.semantic.support.util.ValueUtils;
 
 public class VOCABULARY {
 
-	private static final ValueFactory f = ValueFactoryImpl.getInstance();
 	
-	protected static final URI create(String namespace, String localName) {
-		return f.createURI(namespace, localName);
+	protected static final IRI create(String namespace, String localName) {
+		return ValueUtils.createIRI(namespace, localName);
 	}
 
 }

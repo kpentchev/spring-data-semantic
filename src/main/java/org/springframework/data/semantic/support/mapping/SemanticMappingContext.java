@@ -24,14 +24,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.joda.time.Duration;
 import org.joda.time.Instant;
 import org.joda.time.Interval;
 import org.joda.time.Period;
-import org.openrdf.model.Namespace;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.URIImpl;
 import org.springframework.data.mapping.context.AbstractMappingContext;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
 import org.springframework.data.semantic.annotation.SemanticEntity;
@@ -39,8 +41,6 @@ import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
 import org.springframework.data.semantic.mapping.SemanticPersistentProperty;
 import org.springframework.data.semantic.support.util.ValueUtils;
 import org.springframework.data.util.TypeInformation;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * 
@@ -109,37 +109,37 @@ public class SemanticMappingContext  extends AbstractMappingContext<SemanticPers
 	}
 	
 	/**
-	 * Resolves a {@link String} to an {@link URI}. Check for absolute URI, otherwise try to use defined namespace prefix or use default namespace.
+	 * Resolves a {@link String} to an {@link IRI}. Check for absolute IRI, otherwise try to use defined namespace prefix or use default namespace.
 	 * @param predicate
 	 * @return
 	 */
-	public URI resolveURI(String predicate){
-		if(ValueUtils.isAbsoluteURI(predicate)){
-			return new URIImpl(predicate);
+	public IRI resolveIRI(String predicate){
+		if(ValueUtils.isAbsoluteIRI(predicate)){
+			return SimpleValueFactory.getInstance().createIRI(predicate);
 		}
 		else{
 			String[] parts = predicate.split(":");
 			if(parts.length != 2){
 				if(parts.length == 1){
-					return resolveURIDefaultNS(predicate);
+					return resolveIRIDefaultNS(predicate);
 				}
-				throw new IllegalArgumentException("Not a valid relative URI '"+predicate+"'!");
+				throw new IllegalArgumentException("Not a valid relative IRI '"+predicate+"'!");
 			}
 			String ns = prefix2Namespace.get(parts[0]);
 			if(ns == null){
 				throw new IllegalArgumentException("Unknown namespace for prefix '"+parts[0]+"'!");
 			}
-			return new URIImpl(ns+parts[1]);
+			return SimpleValueFactory.getInstance().createIRI(ns+parts[1]);
 		}
 	}
 	
 	/**
-	 * Resolves a {@link String} to an {@link URI} using the default namespace.
+	 * Resolves a {@link String} to an {@link IRI} using the default namespace.
 	 * @param lName
 	 * @return
 	 */
-	public URI resolveURIDefaultNS(String lName){
-		return new URIImpl(defaultNS.getName()+lName);
+	public IRI resolveIRIDefaultNS(String lName){
+		return SimpleValueFactory.getInstance().createIRI(defaultNS.getName()+lName);
 	}
 
 	@Override public String toString() {

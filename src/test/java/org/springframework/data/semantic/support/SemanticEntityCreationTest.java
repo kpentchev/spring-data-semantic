@@ -19,23 +19,20 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigInteger;
 import java.util.HashMap;
-import java.util.List;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.model.vocabulary.XMLSchema;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.QueryInterruptedException;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.sail.memory.model.IntegerMemLiteral;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openrdf.model.Model;
-import org.openrdf.model.Namespace;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.model.vocabulary.XMLSchema;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryInterruptedException;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.sail.memory.model.IntegerMemLiteral;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
@@ -47,6 +44,7 @@ import org.springframework.data.semantic.model.Merlot;
 import org.springframework.data.semantic.model.vocabulary.WINE;
 import org.springframework.data.semantic.support.convert.EntityToQueryConverter;
 import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
+import org.springframework.data.semantic.support.util.ValueUtils;
 import org.springframework.data.semantic.testutils.Utils;
 import org.springframework.data.util.ClassTypeInformation;
 import org.springframework.test.context.ContextConfiguration;
@@ -64,7 +62,7 @@ public class SemanticEntityCreationTest {
 
 	//------------Expected values------------
 	private HashMap<String, Statement> expectedStatements;	
-	private URI expBody;
+	private IRI expBody;
 	private String expFlavor;
 	private String expMaker;
 	private String expSugar;
@@ -90,42 +88,42 @@ public class SemanticEntityCreationTest {
 		expectedStatements = new HashMap<String, Statement>();
 				
 		expectedStatements.put("urn:field:flavor",
-				new StatementImpl(
-						new URIImpl(WINE.NAMESPACE+"LongridgeMerlot"),
-						new URIImpl("urn:field:flavor"), 
-						new URIImpl(WINE.NAMESPACE+"Moderate")));
+				SimpleValueFactory.getInstance().createStatement(
+						ValueUtils.createIRI(WINE.NAMESPACE+"LongridgeMerlot"),
+						ValueUtils.createIRI("urn:field:flavor"), 
+						ValueUtils.createIRI(WINE.NAMESPACE+"Moderate")));
 		
 		/*expectedStatements.put("urn:field:body",
-				new StatementImpl(
-						new URIImpl(defaultNs.getName()+"LongridgeMerlot"), 
-						new URIImpl("urn:field:body"), 
-						new URIImpl(defaultNs.getName()+"Light")));*/
+				SimpleValueFactory.getInstance().createStatement(
+						ValueUtils.createIRI(defaultNs.getName()+"LongridgeMerlot"), 
+						ValueUtils.createIRI("urn:field:body"), 
+						ValueUtils.createIRI(defaultNs.getName()+"Light")));*/
 		
 		expectedStatements.put("urn:field:maker",
-				new StatementImpl(
-						new URIImpl(WINE.NAMESPACE+"LongridgeMerlot"),
-						new URIImpl("urn:field:maker"), 
-						new URIImpl(WINE.NAMESPACE+"Longridge")));
+				SimpleValueFactory.getInstance().createStatement(
+						ValueUtils.createIRI(WINE.NAMESPACE+"LongridgeMerlot"),
+						ValueUtils.createIRI("urn:field:maker"), 
+						ValueUtils.createIRI(WINE.NAMESPACE+"Longridge")));
 		
 		expectedStatements.put("urn:field:sugar",
-				new StatementImpl(
-						new URIImpl(WINE.NAMESPACE+"LongridgeMerlot"),
-						new URIImpl("urn:field:sugar"), 
-						new URIImpl(WINE.NAMESPACE+"Dry")));
+				SimpleValueFactory.getInstance().createStatement(
+						ValueUtils.createIRI(WINE.NAMESPACE+"LongridgeMerlot"),
+						ValueUtils.createIRI("urn:field:sugar"), 
+						ValueUtils.createIRI(WINE.NAMESPACE+"Dry")));
 		
 		expectedStatements.put("urn:field:location",
-				new StatementImpl(
-						new URIImpl(WINE.NAMESPACE+"LongridgeMerlot"),
-						new URIImpl("urn:field:location"), 
-						new URIImpl(WINE.NAMESPACE+"NewZealandRegion")));
+				SimpleValueFactory.getInstance().createStatement(
+						ValueUtils.createIRI(WINE.NAMESPACE+"LongridgeMerlot"),
+						ValueUtils.createIRI("urn:field:location"), 
+						ValueUtils.createIRI(WINE.NAMESPACE+"NewZealandRegion")));
 		
 		expectedStatements.put("urn:field:year",
-				new StatementImpl(
-						new URIImpl(WINE.NAMESPACE+"LongridgeMerlot"),
-						new URIImpl("urn:field:year"), 
+				SimpleValueFactory.getInstance().createStatement(
+						ValueUtils.createIRI(WINE.NAMESPACE+"LongridgeMerlot"),
+						ValueUtils.createIRI("urn:field:year"), 
 						new IntegerMemLiteral(null, BigInteger.valueOf(1998), XMLSchema.POSITIVE_INTEGER)));
 		
-		expBody = new URIImpl(WINE.NAMESPACE + "Light");
+		expBody = ValueUtils.createIRI(WINE.NAMESPACE + "Light");
 		expFlavor = WINE.NAMESPACE + "Moderate";
 		expMaker = WINE.NAMESPACE + "Longridge";
 		expSugar = WINE.NAMESPACE + "Dry";
@@ -167,7 +165,7 @@ public class SemanticEntityCreationTest {
 	}
 
 	private Model getTestStatements() throws QueryInterruptedException, RepositoryException, QueryCreationException, QueryEvaluationException, MalformedQueryException {
-		URI resource = new URIImpl("http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#LongridgeMerlot");
+		IRI resource = ValueUtils.createIRI("http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#LongridgeMerlot");
 		
 		Model statements =  statementsCollector.getStatementsForResource(resource, Merlot.class, MappingPolicyImpl.ALL_POLICY);
 		return statements;

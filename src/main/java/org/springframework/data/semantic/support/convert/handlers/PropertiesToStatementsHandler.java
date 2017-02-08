@@ -15,12 +15,10 @@
  */
 package org.springframework.data.semantic.support.convert.handlers;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.ContextStatementImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.springframework.data.semantic.core.RDFState;
 import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
 import org.springframework.data.semantic.mapping.SemanticPersistentProperty;
@@ -30,7 +28,7 @@ import org.springframework.data.semantic.support.util.ValueUtils;
 
 public class PropertiesToStatementsHandler extends AbstractPropertiesToStatementsHandlers {
 	
-	private URI resourceId;
+	private IRI resourceId;
 	
 	
 	
@@ -50,9 +48,9 @@ public class PropertiesToStatementsHandler extends AbstractPropertiesToStatement
 		}
 		Resource context = persistentEntity.getContext(entity);
 		if(persistentProperty.isIdProperty()){
-			addStatement(resourceId, new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), persistentEntity.getRDFType(), context);
-			for(URI supertype : persistentEntity.getRDFSuperTypes()){
-				addStatement(resourceId, new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), supertype, context);
+			addStatement(resourceId, ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), persistentEntity.getRDFType(), context);
+			for(IRI supertype : persistentEntity.getRDFSuperTypes()){
+				addStatement(resourceId, ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), supertype, context);
 			}
 		}
 		else{
@@ -88,12 +86,12 @@ public class PropertiesToStatementsHandler extends AbstractPropertiesToStatement
 		}
 	}
 	
-	private void addStatement(Resource subject, URI predicate, Value object, Resource context){
+	private void addStatement(Resource subject, IRI predicate, Value object, Resource context){
 		if(context == null){
-			statements.addStatement(new StatementImpl(subject, predicate, object));
+			statements.addStatement(SimpleValueFactory.getInstance().createStatement(subject, predicate, object));
 		}
 		else{
-			statements.addStatement(new ContextStatementImpl(subject, predicate, object, context));
+			statements.addStatement(SimpleValueFactory.getInstance().createStatement(subject, predicate, object, context));
 		}
 	}
 

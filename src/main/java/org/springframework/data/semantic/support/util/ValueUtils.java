@@ -15,22 +15,22 @@
  */
 package org.springframework.data.semantic.support.util;
 
-import org.openrdf.model.URI;
-import org.openrdf.model.ValueFactory;
-import org.openrdf.model.impl.ValueFactoryImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 
 public final class ValueUtils {
 	
 	public static final String RDF_TYPE_PREDICATE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 	
-	private static final ValueFactory valueFactory = ValueFactoryImpl.getInstance();
+	private static final ValueFactory valueFactory = SimpleValueFactory.getInstance();
 	
 	/**
-	 * Checks whether the given string is a valid {@link URI}.
+	 * Checks whether the given string is a valid {@link IRI}.
 	 * @param source
 	 * @return
 	 */
-	public static boolean isAbsoluteURI(String source){
+	public static boolean isAbsoluteIRI(String source){
 		int schemeSepIdx = source.indexOf(':');
 		if((schemeSepIdx < 0) || (source.indexOf(' ') > -1) || (source.indexOf('|') > 0) ){
 			return false;
@@ -97,12 +97,12 @@ public final class ValueUtils {
 		return true;
 	}
 	
-	public static URI createUri(String source){
-		return valueFactory.createURI(source);
+	public static IRI createIRI(String source){
+		return valueFactory.createIRI(source);
 	}
 	
-	public static URI createUri(String namespace, String localName){
-		return valueFactory.createURI(namespace, localName);
+	public static IRI createIRI(String namespace, String localName){
+		return valueFactory.createIRI(namespace, localName);
 	}
 
 }

@@ -15,7 +15,7 @@
  */
 package org.springframework.data.semantic.model.vocabulary;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 
 /**
  * Vocabulary constants for the wine ontology.
@@ -27,19 +27,19 @@ public class WINE extends VOCABULARY {
 	
 	public static final String NAMESPACE = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#";
 
-	public static final URI WINE = create("Wine");
-	public static final URI RED_WINE = create("RedWine");
-	public static final URI WHITE_WINE = create("WhiteWine");
-	public static final URI LIGHT = create("Light");
-	public static final URI RUBIN = create("Rubin");
-	public static final URI GAMZA = create("Gamza");
-	public static final URI KADARKA = create("Kadarka");
+	public static final IRI WINE = create("Wine");
+	public static final IRI RED_WINE = create("RedWine");
+	public static final IRI WHITE_WINE = create("WhiteWine");
+	public static final IRI LIGHT = create("Light");
+	public static final IRI RUBIN = create("Rubin");
+	public static final IRI GAMZA = create("Gamza");
+	public static final IRI KADARKA = create("Kadarka");
 	
-	public static final URI VERDEJO = create("Verdejo");
-	public static final URI MACABEO = create("Macabeo");
-	public static final URI SAUVIGNON_BLANC = create("Sauvignon_blanc");
+	public static final IRI VERDEJO = create("Verdejo");
+	public static final IRI MACABEO = create("Macabeo");
+	public static final IRI SAUVIGNON_BLANC = create("Sauvignon_blanc");
 	
-	private static URI create(String localName){
+	private static IRI create(String localName){
 		return create(NAMESPACE, localName);
 	}
 

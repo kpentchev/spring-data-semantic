@@ -15,8 +15,12 @@
  */
 package org.springframework.data.semantic.model;
 
-import org.openrdf.model.URI;
-import org.springframework.data.semantic.annotation.*;
+import org.eclipse.rdf4j.model.IRI;
+import org.springframework.data.semantic.annotation.Namespace;
+import org.springframework.data.semantic.annotation.Predicate;
+import org.springframework.data.semantic.annotation.RelatedTo;
+import org.springframework.data.semantic.annotation.ResourceId;
+import org.springframework.data.semantic.annotation.SemanticEntity;
 import org.springframework.data.semantic.model.vocabulary.WINE;
 
 @Namespace(namespace = WINE.NAMESPACE)
@@ -24,7 +28,7 @@ import org.springframework.data.semantic.model.vocabulary.WINE;
 public class Merlot {
 	
 	@ResourceId
-	private URI uri;
+	private IRI uri;
 	
 	@RelatedTo
 	@Predicate("hasBody")
@@ -45,10 +49,10 @@ public class Merlot {
 	@Predicate("hasYear")
 	private int year;
 	
-	public URI getUri() {
+	public IRI getUri() {
 		return uri;
 	}
-	public void setUri(URI uri) {
+	public void setUri(IRI uri) {
 		this.uri = uri;
 	}
 	

@@ -18,7 +18,7 @@ package org.springframework.data.semantic.support.repository;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -71,19 +71,19 @@ public class SemanticRepositoryImpl<T> implements SemanticRepository<T> {
 	}
 
 	@Override
-	public T findOne(URI id) {
+	public T findOne(IRI id) {
 		return operations.find(id, clazz);
 	}
 
 	@Override
-	public boolean exists(URI id) {
+	public boolean exists(IRI id) {
 		return this.operations.exists(id, clazz);
 	}
 
 	@Override
-	public List<T> findAll(Iterable<URI> ids) {
+	public List<T> findAll(Iterable<IRI> ids) {
 		List<T> result = new LinkedList<T>();
-		for(URI id : ids){
+		for(IRI id : ids){
 			T entity = this.operations.find(id, clazz);
 			if(entity != null){
 				result.add(entity);
@@ -98,7 +98,7 @@ public class SemanticRepositoryImpl<T> implements SemanticRepository<T> {
 	}
 
 	@Override
-	public void delete(URI id) {
+	public void delete(IRI id) {
 		operations.delete(id, clazz);
 	}
 

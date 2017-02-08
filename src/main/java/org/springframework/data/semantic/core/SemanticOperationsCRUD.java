@@ -19,8 +19,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Model;
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
 
@@ -43,7 +43,7 @@ public interface SemanticOperationsCRUD {
     <T> T create(T entity);
 	
 	/**
-	 * Store the given entities in the rdf store. If the subject {@link URI} of an entity is already present in the store, the statements for it are updated, otherwise
+	 * Store the given entities in the rdf store. If the subject {@link IRI} of an entity is already present in the store, the statements for it are updated, otherwise
      * statements are just added. Attached relationships will be cascaded. The operation occurs in a single transaction.
      * This method is also provided by the appropriate repository.
 	 * @param entities
@@ -52,7 +52,7 @@ public interface SemanticOperationsCRUD {
 	<T> Iterable<T> save(Iterable<T> entities);
 	
 	 /**
-     * Stores the given entity in the rdf store. If the subject {@link URI} is already present in the store, the statements are updated, otherwise
+     * Stores the given entity in the rdf store. If the subject {@link IRI} is already present in the store, the statements are updated, otherwise
      * statements are just added. Attached relationships will be cascaded.
      * This method is also provided by the appropriate repository.
      */
@@ -63,7 +63,7 @@ public interface SemanticOperationsCRUD {
      * from all indexes and then deleted.
      * @param entity
      */
-    <T> void delete(URI resourceId, Class<? extends T> clazz);
+    <T> void delete(IRI resourceId, Class<? extends T> clazz);
     
     /**
      * Removes the given statements from the rdf store, the entity is first removed
@@ -79,11 +79,11 @@ public interface SemanticOperationsCRUD {
     <T> void deleteAll(Class<? extends T> clazz);
     
     /**
-     * Retrieves an entity of the given type T that is identified by the given {@link URI}.
+     * Retrieves an entity of the given type T that is identified by the given {@link IRI}.
      * @param resourceId
      * @return
      */
-    <T> T find(URI resourceId, Class<? extends T> clazz);
+    <T> T find(IRI resourceId, Class<? extends T> clazz);
     
     /**
      * Retrieve all entities of the given type T.
@@ -110,12 +110,12 @@ public interface SemanticOperationsCRUD {
 	<T> long count(Class<T> clazz);
 	
 	/**
-	 * Check if an instance of the given class with the given {@link URI} id exists in the semantic database. 
+	 * Check if an instance of the given class with the given {@link IRI} id exists in the semantic database. 
 	 * @param resourceId
 	 * @param clazz
 	 * @return
 	 */
-	<T> boolean exists(URI resourceId, Class<? extends T> clazz);
+	<T> boolean exists(IRI resourceId, Class<? extends T> clazz);
 	
 	/**
 	 * Retrieve a collection of entities of the given type that fulfill the parameter requirements.

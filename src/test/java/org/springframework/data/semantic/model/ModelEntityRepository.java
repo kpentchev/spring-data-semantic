@@ -15,12 +15,10 @@
  */
 package org.springframework.data.semantic.model;
 
-import org.openrdf.model.URI;
-import org.springframework.data.semantic.repository.SemanticRepository;
-
 import java.util.List;
 
-import org.springframework.data.semantic.model.ModelEntity;
+import org.eclipse.rdf4j.model.IRI;
+import org.springframework.data.semantic.repository.SemanticRepository;
 
 public interface ModelEntityRepository extends SemanticRepository<ModelEntity> {
 	
@@ -30,7 +28,7 @@ public interface ModelEntityRepository extends SemanticRepository<ModelEntity> {
 	
 	List<ModelEntity> findByRelated(List<ModelEntity> related);
 	
-	List<ModelEntity> findByRelated(URI related);
+	List<ModelEntity> findByRelated(IRI related);
 	
 	Long countByName(String name);
 	
@@ -38,8 +36,8 @@ public interface ModelEntityRepository extends SemanticRepository<ModelEntity> {
 	
 	Long countByRelated(List<ModelEntity> related);
 	
-	Long countByRelated(URI related);
+	Long countByRelated(IRI related);
 	
-	ModelEntity findOneByRelated(URI related);
+	ModelEntity findOneByRelated(IRI related);
 
 }

@@ -15,7 +15,7 @@
  */
 package org.springframework.data.semantic.support.model;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.annotation.ResourceId;
 import org.springframework.data.semantic.annotation.SemanticEntity;
 
@@ -23,13 +23,13 @@ import org.springframework.data.semantic.annotation.SemanticEntity;
 public class SemanticResource {
 	
 	@ResourceId
-	private URI id;
+	private IRI id;
 
-	public URI getId() {
+	public IRI getId() {
 		return id;
 	}
 
-	public void setId(URI id) {
+	public void setId(IRI id) {
 		this.id = id;
 	}
 	

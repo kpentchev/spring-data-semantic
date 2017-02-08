@@ -23,8 +23,6 @@ import org.springframework.data.semantic.convert.access.listener.FieldAccessList
 import org.springframework.data.semantic.core.SemanticOperationsCRUD;
 import org.springframework.data.semantic.mapping.SemanticPersistentProperty;
 import org.springframework.data.semantic.support.SemanticTemplateStatementsCollector;
-import org.springframework.data.semantic.support.convert.access.AssociationFieldAccessorFactory;
-import org.springframework.data.semantic.support.convert.access.PropertyFieldAccessorFactory;
 
 public class DelegatingFieldAccessListenerFactory implements FieldAccessListenerFactory{
 	

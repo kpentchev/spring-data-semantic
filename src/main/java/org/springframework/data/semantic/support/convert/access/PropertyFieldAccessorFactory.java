@@ -15,10 +15,8 @@
  */
 package org.springframework.data.semantic.support.convert.access;
 
-import java.util.List;
-
-import org.openrdf.model.Model;
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
 import org.springframework.data.semantic.convert.access.FieldAccessor;
 import org.springframework.data.semantic.convert.access.FieldAccessorFactory;
 import org.springframework.data.semantic.mapping.MappingPolicy;
@@ -44,7 +42,9 @@ public class PropertyFieldAccessorFactory implements FieldAccessorFactory {
 	
 	public static class PropertyFieldAccessor implements FieldAccessor {
 		private SemanticPersistentProperty property;
-		private URI predicate;
+		@SuppressWarnings("unused")
+		private IRI predicate;
+		@SuppressWarnings("unused")
 		private Class<?> fieldType;
 		private SemanticTemplateStatementsCollector template;
 		

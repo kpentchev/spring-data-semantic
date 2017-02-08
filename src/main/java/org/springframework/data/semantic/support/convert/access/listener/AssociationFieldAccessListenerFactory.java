@@ -26,7 +26,9 @@ import org.springframework.data.semantic.support.SemanticTemplateStatementsColle
 
 public class AssociationFieldAccessListenerFactory implements FieldAccessListenerFactory{
 	
+	@SuppressWarnings("unused")
 	private final SemanticTemplateStatementsCollector statementsCollector;
+	@SuppressWarnings("unused")
 	private final SemanticOperationsCRUD operations;
 	
 

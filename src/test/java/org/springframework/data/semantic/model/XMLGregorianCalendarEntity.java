@@ -15,25 +15,25 @@
  */
 package org.springframework.data.semantic.model;
 
-import org.openrdf.model.URI;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.annotation.ResourceId;
 import org.springframework.data.semantic.annotation.SemanticEntity;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 @SemanticEntity
 public class XMLGregorianCalendarEntity {
 
     @ResourceId
-    URI id;
+    IRI id;
 
     XMLGregorianCalendar date;
 
-    public URI getId() {
+    public IRI getId() {
         return id;
     }
 
-    public void setId(URI id) {
+    public void setId(IRI id) {
         this.id = id;
     }
 

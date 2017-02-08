@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.openrdf.model.Model;
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Resource;
 import org.springframework.data.semantic.convert.access.FieldAccessor;
 import org.springframework.data.semantic.convert.access.FieldAccessorFactory;
 import org.springframework.data.semantic.core.SemanticOperationsCRUD;
@@ -97,7 +97,7 @@ public class AssociationFieldAccessorFactory implements FieldAccessorFactory {
 				Set<Resource> subjects = stIterator.subjects();
 				List<Object> result = new ArrayList<Object>(subjects.size());
 				for(Resource subject : subjects){
-					Model iterator = statementsCollector.getStatementsForResource((URI) subject, fieldType, MappingPolicyImpl.ALL_POLICY);
+					Model iterator = statementsCollector.getStatementsForResource((IRI) subject, fieldType, MappingPolicyImpl.ALL_POLICY);
 					result.add(operations.createEntity(iterator, fieldType));
 				}
 				if(this.property.isArray()){
@@ -110,7 +110,7 @@ public class AssociationFieldAccessorFactory implements FieldAccessorFactory {
 			else{
 				if(!stIterator.isEmpty()) {
 					
-					URI resource = (URI) stIterator.objects().iterator().next();
+					IRI resource = (IRI) stIterator.objects().iterator().next();
 					Model iterator = statementsCollector.getStatementsForResource(resource, fieldType, MappingPolicyImpl.ALL_POLICY);
 					
 					return operations.createEntity(iterator, fieldType);

@@ -15,37 +15,37 @@
  */
 package org.springframework.data.semantic.core;
 
-import info.aduna.iteration.Iterations;
-
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
-import org.openrdf.model.Model;
-import org.openrdf.model.Namespace;
-import org.openrdf.model.Resource;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
-import org.openrdf.model.impl.ContextStatementImpl;
-import org.openrdf.model.impl.NamespaceImpl;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryInterruptedException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.QueryResults;
-import org.openrdf.query.Update;
-import org.openrdf.query.UpdateExecutionException;
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.repository.RepositoryResult;
-import org.openrdf.rio.RDFFormat;
-import org.openrdf.rio.RDFParseException;
+import org.eclipse.rdf4j.common.iteration.Iterations;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Namespace;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.model.impl.SimpleNamespace;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
+import org.eclipse.rdf4j.query.BindingSet;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.QueryInterruptedException;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.QueryResults;
+import org.eclipse.rdf4j.query.Update;
+import org.eclipse.rdf4j.query.UpdateExecutionException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.RepositoryResult;
+import org.eclipse.rdf4j.rio.RDFFormat;
+import org.eclipse.rdf4j.rio.RDFParseException;
+import org.eclipse.rdf4j.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -53,7 +53,7 @@ import org.springframework.data.repository.query.QueryCreationException;
 import org.springframework.data.semantic.query.BooleanSparqlQuery;
 import org.springframework.data.semantic.query.GraphSparqlQuery;
 import org.springframework.data.semantic.query.TupleSparqlQuery;
-import org.springframework.data.semantic.support.database.SesameConnectionPool;
+import org.springframework.data.semantic.support.database.Rdf4jConnectionPool;
 import org.springframework.data.semantic.support.exceptions.SemanticDatabaseAccessException;
 import org.springframework.data.semantic.support.exceptions.UncategorizedSemanticDataAccessException;
 
@@ -65,15 +65,15 @@ import org.springframework.data.semantic.support.exceptions.UncategorizedSemanti
  */
 public class PooledSemanticDatabase implements SemanticDatabase{
 
-	private SesameConnectionPool connectionPool;
+	private Rdf4jConnectionPool connectionPool;
 	
 	private Logger logger = LoggerFactory.getLogger(PooledSemanticDatabase.class);
 
 	public PooledSemanticDatabase(Repository repository, int maxConnections){
-		this(new SesameConnectionPool(repository, maxConnections, 6000));			
+		this(new Rdf4jConnectionPool(repository, maxConnections, 6000));			
 	}
 
-	public PooledSemanticDatabase(SesameConnectionPool pool){
+	public PooledSemanticDatabase(Rdf4jConnectionPool pool){
 		this.connectionPool = pool;
 	}
 
@@ -151,7 +151,7 @@ public class PooledSemanticDatabase implements SemanticDatabase{
 		return getStatementsForQuadruplePattern(subject, null, null, null);
 	}
 
-	public List<Statement> getStatementsForPredicate(URI predicate){
+	public List<Statement> getStatementsForPredicate(IRI predicate){
 		return getStatementsForQuadruplePattern(null, predicate, null, null);
 	}
 
@@ -164,12 +164,12 @@ public class PooledSemanticDatabase implements SemanticDatabase{
 	}
 
 	public List<Statement> getStatementsForTriplePattern(Resource subject,
-			URI predicate, Value object){
+			IRI predicate, Value object){
 		return getStatementsForQuadruplePattern(subject, predicate, object, null);
 	}
 
 	public List<Statement> getStatementsForQuadruplePattern(Resource subject,
-			URI predicate, Value object, Resource context){
+			IRI predicate, Value object, Resource context){
 		RepositoryConnection con = connectionPool.getConnection();
 		try {
 			RepositoryResult<Statement> repoResult = con.getStatements(subject, predicate, object, true, context);
@@ -209,13 +209,13 @@ public class PooledSemanticDatabase implements SemanticDatabase{
 		}		
 	}
 
-	public void addStatement(Resource subject, URI predicate, Value object) {
-		addStatement(new StatementImpl(subject, predicate, object));
+	public void addStatement(Resource subject, IRI predicate, Value object) {
+		addStatement(SimpleValueFactory.getInstance().createStatement(subject, predicate, object));
 	}
 
-	public void addStatement(Resource subject, URI predicate, Value object,
+	public void addStatement(Resource subject, IRI predicate, Value object,
 			Resource context) {
-		addStatement(new ContextStatementImpl(subject, predicate, object, context));	
+		addStatement(SimpleValueFactory.getInstance().createStatement(subject, predicate, object, context));	
 	}
 
 	public void addStatements(Collection<? extends Statement> statements) {
@@ -242,13 +242,13 @@ public class PooledSemanticDatabase implements SemanticDatabase{
 
 	public void addStatementsFromFile(File rdfSource) {
 
-		RDFFormat format = RDFFormat.forFileName(rdfSource.getName());
-		if(format == null) {
+		Optional<RDFFormat> format = Rio.getParserFormatForFileName(rdfSource.getName());
+		if(!format.isPresent()) {
 			throw new InvalidParameterException("File should be in a valid RDF format; cannot determine one from the file extension.");
 		}
 		RepositoryConnection con = connectionPool.getConnection();
 		try {
-			con.add(rdfSource, null, format, new Resource[]{});
+			con.add(rdfSource, null, format.get(), new Resource[]{});
 		} catch (RDFParseException e) {
 			logger.error(e.getMessage(),e);
 			try {
@@ -304,11 +304,11 @@ public class PooledSemanticDatabase implements SemanticDatabase{
 		}		
 	}
 
-	public void removeStatements(Resource subject, URI predicate, Value object) {
+	public void removeStatements(Resource subject, IRI predicate, Value object) {
 		removeStatements(subject, predicate, object, null);
 	}
 
-	public void removeStatements(Resource subject, URI predicate, Value object,
+	public void removeStatements(Resource subject, IRI predicate, Value object,
 			Resource context) {
 		RepositoryConnection con = connectionPool.getConnection();
 		try {
@@ -368,9 +368,9 @@ public class PooledSemanticDatabase implements SemanticDatabase{
 		try {
 			String defaultNSName = con.getNamespace("");
 			if(defaultNSName == null){
-				return new NamespaceImpl("", "urn:spring-data-semantic:");
+				return new SimpleNamespace("", "urn:spring-data-semantic:");
 			}
-			return new NamespaceImpl("", defaultNSName);
+			return new SimpleNamespace("", defaultNSName);
 		} finally {
 			con.close();
 		}		

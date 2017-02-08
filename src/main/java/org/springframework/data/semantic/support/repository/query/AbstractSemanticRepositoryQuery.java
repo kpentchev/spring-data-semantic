@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.repository.query.Parameter;
 import org.springframework.data.repository.query.ParameterAccessor;
 import org.springframework.data.repository.query.Parameters;
@@ -82,7 +82,7 @@ public abstract class AbstractSemanticRepositoryQuery implements RepositoryQuery
 				Object firstValue = values.iterator().next();
 				if(operations.getSemanticMappingContext().isSemanticPersistentEntity(firstValue.getClass())){
 					SemanticPersistentEntity<?> persistentEntity = operations.getSemanticMappingContext().getPersistentEntity(firstValue.getClass());
-					List<URI> ids = new ArrayList<URI>(values.size());
+					List<IRI> ids = new ArrayList<IRI>(values.size());
 					for(Object o : values){
 						ids.add(persistentEntity.getResourceId(o));
 					}

@@ -17,7 +17,7 @@ package org.springframework.data.semantic.mapping;
 
 import java.util.List;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.semantic.annotation.Context;
 import org.springframework.data.semantic.annotation.Optional;
@@ -42,7 +42,7 @@ public interface SemanticPersistentProperty extends PersistentProperty<SemanticP
 	 * 
 	 * @return
 	 */
-	URI getPredicate();
+	IRI getPredicate();
 	
 	/**
 	 * Returns the predicate associated with the inverse property from an associated entity. Null otherwise.

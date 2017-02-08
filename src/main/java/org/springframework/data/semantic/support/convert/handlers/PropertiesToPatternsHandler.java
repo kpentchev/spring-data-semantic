@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.springframework.data.mapping.Association;
 import org.springframework.data.semantic.convert.ObjectToLiteralConverter;
 import org.springframework.data.semantic.mapping.MappingPolicy;
@@ -130,7 +130,7 @@ public class PropertiesToPatternsHandler extends AbstractPropertiesToQueryHandle
 			if(optional && isCount){
 				return;
 			}
-			URI predicate = persistentProperty.getPredicate();
+			IRI predicate = persistentProperty.getPredicate();
 			String subj = "";
 			String obj = "";
 			String pred = "<"+predicate+">";
@@ -142,13 +142,13 @@ public class PropertiesToPatternsHandler extends AbstractPropertiesToQueryHandle
 					}
 					for (Object o : (Collection<Object>) objectValue){
 						Value val = this.objectToLiteralConverter.convert(o);
-						obj = val instanceof URI ? "<"+val.toString()+">" : val.toString();
+						obj = val instanceof IRI ? "<"+val.toString()+">" : val.toString();
 						addPattern(persistentProperty, optional, subj, pred, obj);
 					}
 				}
 				else{
 					Value val = this.objectToLiteralConverter.convert(objectValue);
-					obj = val instanceof URI ? "<"+val.toString()+">" : val.toString();
+					obj = val instanceof IRI ? "<"+val.toString()+">" : val.toString();
 					addPattern(persistentProperty, optional, subj, pred, obj);
 				}
 			}

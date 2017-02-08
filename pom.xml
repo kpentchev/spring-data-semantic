@@ -64,41 +64,75 @@
 	</developers>
 
 	<properties>
-		<sesame.version>2.7.12</sesame.version>
+		<spring.version>4.3.5.RELEASE</spring.version>
+		<rdf4j.version>2.1.4</rdf4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
+		<!-- Rdf4J -->
+		<dependency>
+			<groupId>org.eclipse.rdf4j</groupId>
+			<artifactId>rdf4j-repository-manager</artifactId>
+			<version>${rdf4j.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-webmvc</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.rdf4j</groupId>
+			<artifactId>rdf4j-model</artifactId>
+			<version>${rdf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.rdf4j</groupId>
+			<artifactId>rdf4j-query</artifactId>
+			<version>${rdf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.rdf4j</groupId>
+			<artifactId>rdf4j-queryparser-sparql</artifactId>
+			<version>${rdf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.rdf4j</groupId>
+			<artifactId>rdf4j-rio-turtle</artifactId>
+			<version>${rdf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>3.2.9.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>3.2.9.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>3.2.9.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>3.2.9.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>3.2.9.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>3.2.9.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<!-- Spring Data -->
@@ -108,51 +142,17 @@
 			<version>1.8.1.RELEASE</version>
 		</dependency>
 
-		<!-- Sesame -->
-		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-repository-manager</artifactId>
-			<version>${sesame.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-webmvc</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-model</artifactId>
-			<version>${sesame.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-query</artifactId>
-			<version>${sesame.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-queryparser-sparql</artifactId>
-			<version>${sesame.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-rio-turtle</artifactId>
-			<version>${sesame.version}</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
+			<version>4.12</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>3.2.9.RELEASE</version>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -162,9 +162,9 @@
 			<version>2.2</version>
 		</dependency>
 		<dependency>
-			<groupId>org.openrdf.sesame</groupId>
-			<artifactId>sesame-rio-n3</artifactId>
-			<version>${sesame.version}</version>
+			<groupId>org.eclipse.rdf4j</groupId>
+			<artifactId>rdf4j-rio-n3</artifactId>
+			<version>${rdf4j.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -185,6 +185,7 @@
 			<artifactId>joda-time</artifactId>
 			<version>2.5</version>
 		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -360,6 +361,5 @@
 			<url>http://maven.ontotext.com/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
 
 </project>

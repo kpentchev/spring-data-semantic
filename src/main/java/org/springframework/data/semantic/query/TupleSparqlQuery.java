@@ -15,19 +15,19 @@
  */
 package org.springframework.data.semantic.query;
 
-import org.openrdf.OpenRDFException;
-import org.openrdf.model.impl.URIImpl;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.query.TupleQueryResultHandler;
-import org.openrdf.query.TupleQueryResultHandlerException;
-import org.openrdf.query.UnsupportedQueryLanguageException;
-import org.openrdf.query.impl.DatasetImpl;
-import org.openrdf.query.parser.ParsedTupleQuery;
-import org.openrdf.repository.RepositoryConnection;
+import org.eclipse.rdf4j.RDF4JException;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.TupleQuery;
+import org.eclipse.rdf4j.query.TupleQueryResult;
+import org.eclipse.rdf4j.query.TupleQueryResultHandler;
+import org.eclipse.rdf4j.query.TupleQueryResultHandlerException;
+import org.eclipse.rdf4j.query.UnsupportedQueryLanguageException;
+import org.eclipse.rdf4j.query.impl.SimpleDataset;
+import org.eclipse.rdf4j.query.parser.ParsedTupleQuery;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.springframework.data.semantic.support.util.ValueUtils;
 
 
 public class TupleSparqlQuery extends AbstractSparqlQuery implements TupleQuery {
@@ -61,7 +61,7 @@ public class TupleSparqlQuery extends AbstractSparqlQuery implements TupleQuery 
 			prePrepare();
 			query = connection.prepareTupleQuery(QueryLanguage.SPARQL, str);
 			postPrepare();
-		} catch (OpenRDFException e) {
+		} catch (RDF4JException e) {
 			throw new QueryEvaluationException(e);
 		}
 	}
@@ -83,9 +83,9 @@ public class TupleSparqlQuery extends AbstractSparqlQuery implements TupleQuery 
 		super.postPrepare();
 		if (count) {			
 			if (query.getDataset() == null) {
-				query.setDataset(new DatasetImpl());
+				query.setDataset(new SimpleDataset());
 			}
-			((DatasetImpl) query.getDataset()).addDefaultGraph(new URIImpl(COUNT_URI));
+			((SimpleDataset) query.getDataset()).addDefaultGraph(ValueUtils.createIRI(COUNT_URI));
 		}		
 	}
 	

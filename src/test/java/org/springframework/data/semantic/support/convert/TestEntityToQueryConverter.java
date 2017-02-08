@@ -24,21 +24,22 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.impl.SimpleNamespace;
 import org.junit.Before;
 import org.junit.Test;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.NamespaceImpl;
-import org.openrdf.model.impl.URIImpl;
 import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
 import org.springframework.data.semantic.model.ModelEntity;
 import org.springframework.data.semantic.model.ModelEntityCollector;
 import org.springframework.data.semantic.support.MappingPolicyImpl;
 import org.springframework.data.semantic.support.mapping.SemanticMappingContext;
+import org.springframework.data.semantic.support.util.ValueUtils;
 import org.springframework.data.util.ClassTypeInformation;
 
 public class TestEntityToQueryConverter {
 	private String expectedBindings = "<http://ontotext.com/resource/test> a <urn:spring-data-semantic:ModelEntity> . <http://ontotext.com/resource/test> <urn:modelentity:field:name> ?modelentity_name . <http://ontotext.com/resource/test> <urn:modelentity:field:synonyms> ?modelentity_synonyms . <http://ontotext.com/resource/test> <urn:modelentity:field:related> ?modelentity_related . ";
 	private String expectedPattern = "<http://ontotext.com/resource/test> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <urn:spring-data-semantic:ModelEntity> . OPTIONAL { <http://ontotext.com/resource/test> <http://www.w3.org/2004/02/skos/core#prefLabel> ?modelentity_name . } OPTIONAL { <http://ontotext.com/resource/test> <http://www.w3.org/2004/02/skos/core#altLabel> ?modelentity_synonyms . } OPTIONAL { <http://ontotext.com/resource/test> <urn:spring-data-semantic:related> ?modelentity_related . } ";
+	@SuppressWarnings("unused")
 	private String expectedQuery = "CONSTRUCT { "+expectedBindings+" } WHERE { "+expectedPattern+"}";
 	
 	private String expectedBindingsEager = "<http://ontotext.com/resource/test-collection> a <urn:spring-data-semantic:ModelEntityCollector> . <http://ontotext.com/resource/test-collection> <urn:modelentitycollector:field:entities> ?modelentitycollector_entities . ?modelentitycollector_entities a <urn:spring-data-semantic:ModelEntity> . ?modelentitycollector_entities <urn:modelentity:field:name> ?modelentitycollector_entities_modelentity_name . ?modelentitycollector_entities <urn:modelentity:field:synonyms> ?modelentitycollector_entities_modelentity_synonyms . ?modelentitycollector_entities <urn:modelentity:field:related> ?modelentitycollector_entities_modelentity_related . ";
@@ -50,9 +51,9 @@ public class TestEntityToQueryConverter {
     private String expectedQueryUnion = "CONSTRUCT { "+expectedBindingsUnion+" } WHERE { "+expectedPatternUnion+"}";
 
 
-    private URI resource = new URIImpl("http://ontotext.com/resource/test");
+    private IRI resource = ValueUtils.createIRI("http://ontotext.com/resource/test");
 	
-	private URI collectionResource = new URIImpl("http://ontotext.com/resource/test-collection");
+	private IRI collectionResource = ValueUtils.createIRI("http://ontotext.com/resource/test-collection");
 	
 	private SemanticMappingContext mappingContext;
 	private SemanticPersistentEntity<?> testEntityType;
@@ -65,7 +66,7 @@ public class TestEntityToQueryConverter {
 	
 	@Before
 	public void setup(){
-		this.mappingContext = new SemanticMappingContext(Arrays.asList(new NamespaceImpl("skos", "http://www.w3.org/2004/02/skos/core#")), new NamespaceImpl("", "urn:spring-data-semantic:"), true);
+		this.mappingContext = new SemanticMappingContext(Arrays.asList(new SimpleNamespace("skos", "http://www.w3.org/2004/02/skos/core#")), new SimpleNamespace("", "urn:spring-data-semantic:"), true);
 		this.testEntityType = this.mappingContext.getPersistentEntity(ClassTypeInformation.from(ModelEntity.class));
 		this.testCollectionType = this.mappingContext.getPersistentEntity(ClassTypeInformation.from(ModelEntityCollector.class));
 		this.entityToQueryConverter = new EntityToQueryConverter(this.mappingContext);
