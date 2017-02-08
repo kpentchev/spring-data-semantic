@@ -15,7 +15,7 @@
  */
 package org.springframework.data.semantic.support.cache;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.cache.EntityCache;
 
 public class EmptyEntityCache implements EntityCache {
@@ -26,7 +26,7 @@ public class EmptyEntityCache implements EntityCache {
 	}
 
 	@Override
-	public <T> T get(URI id, Class<? extends T> clazz) {
+	public <T> T get(IRI id, Class<? extends T> clazz) {
 		return null;
 	}
 

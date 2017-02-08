@@ -17,7 +17,7 @@ package org.springframework.data.semantic.support.convert;
 
 import java.util.HashMap;
 
-import org.openrdf.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.springframework.data.semantic.convert.SemanticEntityRemover;
 import org.springframework.data.semantic.core.RDFState;
 import org.springframework.data.semantic.core.SemanticDatabase;

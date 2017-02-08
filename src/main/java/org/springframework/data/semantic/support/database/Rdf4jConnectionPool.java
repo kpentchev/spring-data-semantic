@@ -22,9 +22,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.openrdf.repository.Repository;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
+import org.eclipse.rdf4j.repository.Repository;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author konstantin.pentchev
  */
-public final class SesameConnectionPool {
+public final class Rdf4jConnectionPool {
 	private BlockingQueue<ExtendedRepositoryConnection> availableList;
 	private Map<ExtendedRepositoryConnection, Long> inUseList;
 	private volatile AtomicInteger openConnections = new AtomicInteger(0);
@@ -55,7 +55,7 @@ public final class SesameConnectionPool {
 	 * @param maxConnections
 	 *            maximum number of connections to the repository
 	 */
-	public SesameConnectionPool(Repository repository,
+	public Rdf4jConnectionPool(Repository repository,
 			int maxConnections, int timeoutToCollect) {
 		this.maxConnections = maxConnections;
 		this.availableList = new ArrayBlockingQueue<ExtendedRepositoryConnection>(

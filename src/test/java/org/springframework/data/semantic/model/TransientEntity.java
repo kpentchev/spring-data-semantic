@@ -17,7 +17,7 @@ package org.springframework.data.semantic.model;
 
 import java.text.DateFormat;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.semantic.annotation.ResourceId;
 import org.springframework.data.semantic.annotation.SemanticEntity;
@@ -26,16 +26,16 @@ import org.springframework.data.semantic.annotation.SemanticEntity;
 public class TransientEntity {
 	
 	@ResourceId
-	private URI uri;
+	private IRI uri;
 	
 	@Transient
 	private DateFormat testProperty;
 
-	public URI getUri() {
+	public IRI getUri() {
 		return uri;
 	}
 
-	public void setUri(URI uri) {
+	public void setUri(IRI uri) {
 		this.uri = uri;
 	}
 

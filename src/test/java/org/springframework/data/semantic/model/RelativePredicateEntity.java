@@ -15,8 +15,7 @@
  */
 package org.springframework.data.semantic.model;
 
-import org.openrdf.model.URI;
-import org.springframework.data.semantic.annotation.Namespace;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.annotation.Predicate;
 import org.springframework.data.semantic.annotation.ResourceId;
 import org.springframework.data.semantic.annotation.SemanticEntity;
@@ -25,7 +24,7 @@ import org.springframework.data.semantic.annotation.SemanticEntity;
 public class RelativePredicateEntity {
 
 	@ResourceId
-	private URI id;
+	private IRI id;
 
 	@Predicate("urn:really:absolute")
 	private String withAbsolutePredicate;
@@ -36,14 +35,14 @@ public class RelativePredicateEntity {
 	/**
 	 * @return the id
 	 */
-	public URI getId() {
+	public IRI getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(URI id) {
+	public void setId(IRI id) {
 		this.id = id;
 	}
 

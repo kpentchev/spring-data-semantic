@@ -17,7 +17,7 @@ package org.springframework.data.semantic.model;
 
 import java.util.List;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.annotation.Context;
 import org.springframework.data.semantic.annotation.Language;
 import org.springframework.data.semantic.annotation.Language.Languages;
@@ -32,7 +32,7 @@ import org.springframework.data.semantic.support.Direction;
 public class ModelEntity {
 	
 	@ResourceId
-	private URI uri;
+	private IRI uri;
 	
 	//@Datatype(XSDDatatype.)
 	@Optional
@@ -55,14 +55,14 @@ public class ModelEntity {
 	/**
 	 * @return the uri
 	 */
-	public URI getUri() {
+	public IRI getUri() {
 		return uri;
 	}
 
 	/**
 	 * @param uri the uri to set
 	 */
-	public void setUri(URI uri) {
+	public void setUri(IRI uri) {
 		this.uri = uri;
 	}
 

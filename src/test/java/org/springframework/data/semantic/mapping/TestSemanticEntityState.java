@@ -17,11 +17,10 @@ package org.springframework.data.semantic.mapping;
 
 import static org.junit.Assert.assertEquals;
 
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openrdf.model.impl.StatementImpl;
-import org.openrdf.model.impl.URIImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.data.semantic.core.RDFState;
@@ -54,7 +53,7 @@ public class TestSemanticEntityState {
 		long count = sdb.count();
 		
 		RDFState statements = new RDFState();
-		statements.addStatement(new StatementImpl(new URIImpl("urn:test:entity-state-1"), new URIImpl(ValueUtils.RDF_TYPE_PREDICATE), new URIImpl("unr:type:test-statement")));
+		statements.addStatement(SimpleValueFactory.getInstance().createStatement(ValueUtils.createIRI("urn:test:entity-state-1"), ValueUtils.createIRI(ValueUtils.RDF_TYPE_PREDICATE), ValueUtils.createIRI("unr:type:test-statement")));
 		entityState.setPersistentState(statements);
 		entityState.persist();
 		assertEquals(count+1, sdb.count());

@@ -17,8 +17,8 @@ package org.springframework.data.semantic.mapping;
 
 import java.util.List;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.springframework.data.mapping.model.MutablePersistentEntity;
 import org.springframework.data.semantic.core.RDFState;
 
@@ -52,23 +52,23 @@ public interface SemanticPersistentEntity<T> extends MutablePersistentEntity<T, 
 	 boolean hasContextProperty();
 	 
 	 /**
-	  * Returns the {@link URI} identifying this entity's RDF type.
+	  * Returns the {@link IRI} identifying this entity's RDF type.
 	  * @return
 	  */
-	 URI getRDFType();
+	 IRI getRDFType();
 	 
 	 /**
-	  * Returns the {@link List} of {@link URI}s identifying this entity's superclass' RDF types.
+	  * Returns the {@link List} of {@link IRI}s identifying this entity's superclass' RDF types.
 	  * @return
 	  */
-	 List<URI> getRDFSuperTypes();
+	 List<IRI> getRDFSuperTypes();
 	 
 	 /**
-	  * Retrieve the {@link URI} of the given instance.
+	  * Retrieve the {@link IRI} of the given instance.
 	  * @param entity
 	  * @return
 	  */
-	 URI getResourceId(Object entity);
+	 IRI getResourceId(Object entity);
 	 
 	 /**
 	  * Sets the subject id of the entity from the given statements.
@@ -78,15 +78,15 @@ public interface SemanticPersistentEntity<T> extends MutablePersistentEntity<T, 
 	 void setPersistentState(Object entity, RDFState statements);
 	 
 	 /**
-	  * Set the given {@link URI} as the id of the given instance.
+	  * Set the given {@link IRI} as the id of the given instance.
 	  * @param id
 	  */
-	 void setResourceId(Object entity, URI id);
+	 void setResourceId(Object entity, IRI id);
 	 
 	 /**
 	  * Retrieve the namespace value.
 	  * @return
 	  */
-	 URI getNamespace();
+	 IRI getNamespace();
 
 }

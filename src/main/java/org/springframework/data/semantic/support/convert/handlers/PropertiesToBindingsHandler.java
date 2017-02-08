@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openrdf.model.URI;
-import org.openrdf.model.Value;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Value;
 import org.springframework.data.mapping.Association;
 import org.springframework.data.semantic.convert.ObjectToLiteralConverter;
 import org.springframework.data.semantic.mapping.MappingPolicy;
@@ -86,7 +86,7 @@ public class PropertiesToBindingsHandler extends AbstractPropertiesToQueryHandle
 					}
 					for(Object o : (Collection<Object>) objectValue){
 						Value val = this.objectToLiteralConverter.convert(o);
-						String obj = val instanceof URI ? "<"+val+">" : val.toString();
+						String obj = val instanceof IRI ? "<"+val+">" : val.toString();
 						if(originalPredicates){
 							appendPattern(sb, binding, "<" + persistentProperty.getPredicate() + ">", obj);
 						}
@@ -97,7 +97,7 @@ public class PropertiesToBindingsHandler extends AbstractPropertiesToQueryHandle
 				}
 				else{
 					Value val = this.objectToLiteralConverter.convert(objectValue);
-					String obj = val instanceof URI ? "<"+val+">" : val.toString();
+					String obj = val instanceof IRI ? "<"+val+">" : val.toString();
 					if(originalPredicates){
 						appendPattern(sb, binding, "<" + persistentProperty.getPredicate() + ">", obj);
 					}

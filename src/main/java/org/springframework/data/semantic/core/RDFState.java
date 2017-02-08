@@ -15,9 +15,9 @@
  */
 package org.springframework.data.semantic.core;
 
-import org.openrdf.model.Model;
-import org.openrdf.model.Statement;
-import org.openrdf.model.impl.LinkedHashModel;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.impl.LinkedHashModel;
 
 public class RDFState {
 	

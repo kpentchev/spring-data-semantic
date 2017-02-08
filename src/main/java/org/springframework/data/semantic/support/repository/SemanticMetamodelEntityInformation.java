@@ -15,24 +15,24 @@
  */
 package org.springframework.data.semantic.support.repository;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.repository.core.support.AbstractEntityInformation;
 
-public class SemanticMetamodelEntityInformation<T> extends AbstractEntityInformation<T, URI> {
+public class SemanticMetamodelEntityInformation<T> extends AbstractEntityInformation<T, IRI> {
 
 	public SemanticMetamodelEntityInformation(Class<T> domainClass) {
 		super(domainClass);
 	}
 
 	@Override
-	public URI getId(T entity) {
+	public IRI getId(T entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Class<URI> getIdType() {
-		return URI.class;
+	public Class<IRI> getIdType() {
+		return IRI.class;
 	}
 
 }

@@ -17,7 +17,7 @@ package org.springframework.data.semantic.model;
 
 import java.util.Date;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 import org.springframework.data.semantic.annotation.ResourceId;
 import org.springframework.data.semantic.annotation.SemanticEntity;
 
@@ -25,21 +25,21 @@ import org.springframework.data.semantic.annotation.SemanticEntity;
 public class DateEntity {
 	
 	@ResourceId
-	private URI id;
+	private IRI id;
 	
 	private Date date;
 
 	/**
 	 * @return the id
 	 */
-	public URI getId() {
+	public IRI getId() {
 		return id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(URI id) {
+	public void setId(IRI id) {
 		this.id = id;
 	}
 

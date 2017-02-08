@@ -21,10 +21,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.openrdf.model.Model;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.impl.URIImpl;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Statement;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.semantic.convert.access.FieldAccessor;
 import org.springframework.data.semantic.convert.access.FieldAccessorProvider;
@@ -40,6 +39,7 @@ import org.springframework.data.semantic.support.convert.access.DelegatingFieldA
 import org.springframework.data.semantic.support.convert.access.DelegatingFieldAccessorProvider;
 import org.springframework.data.semantic.support.convert.access.listener.DelegatingFieldAccessListenerFactory;
 import org.springframework.data.semantic.support.convert.access.listener.DelegatingFieldAccessListenerProvider;
+import org.springframework.data.semantic.support.util.ValueUtils;
 
 public class SemanticEntityState<T> implements
 		EntityState<T, RDFState> {
@@ -116,7 +116,7 @@ public class SemanticEntityState<T> implements
 	
 	private Object getValueFromState(SemanticPersistentProperty property){
 		String alias = property.getAliasPredicate();
-		URI predicate = new URIImpl(alias);
+		IRI predicate = ValueUtils.createIRI(alias);
 		Model model = state.getCurrentStatements();
 		
 		List<Object> values = new LinkedList<Object>();

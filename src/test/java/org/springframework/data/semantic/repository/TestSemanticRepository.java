@@ -26,19 +26,36 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.datatypes.XMLDatatypeUtil;
+import org.eclipse.rdf4j.repository.RepositoryException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.datatypes.XMLDatatypeUtil;
-import org.openrdf.repository.RepositoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.semantic.core.SemanticDatabase;
-import org.springframework.data.semantic.model.*;
+import org.springframework.data.semantic.model.DateEntity;
+import org.springframework.data.semantic.model.DateEntityRepository;
+import org.springframework.data.semantic.model.ModelEntity;
+import org.springframework.data.semantic.model.ModelEntityCollector;
+import org.springframework.data.semantic.model.ModelEntityCollectorCascadeAll;
+import org.springframework.data.semantic.model.ModelEntityCollectorCascadeAllRepository;
+import org.springframework.data.semantic.model.ModelEntityCollectorRepository;
+import org.springframework.data.semantic.model.ModelEntityExtended;
+import org.springframework.data.semantic.model.ModelEntityExtendedRepository;
+import org.springframework.data.semantic.model.ModelEntityRepository;
+import org.springframework.data.semantic.model.TransientEntity;
+import org.springframework.data.semantic.model.TransientEntityRepository;
+import org.springframework.data.semantic.model.WineBody;
+import org.springframework.data.semantic.model.WineBodyRepository;
+import org.springframework.data.semantic.model.XMLGregorianCalendarEntity;
+import org.springframework.data.semantic.model.XMLGregorianCalendarRepository;
 import org.springframework.data.semantic.model.vocabulary.DATE_ENTITY;
 import org.springframework.data.semantic.model.vocabulary.MODEL_ENTITY;
 import org.springframework.data.semantic.model.vocabulary.WINE;
@@ -46,8 +63,6 @@ import org.springframework.data.semantic.model.vocabulary.XMLCALENDAR_ENTITY;
 import org.springframework.data.semantic.testutils.Utils;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import javax.xml.datatype.XMLGregorianCalendar;
 
 @FixMethodOrder
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -206,7 +221,7 @@ public class TestSemanticRepository {
 	
 	@Test
 	public void testFindList(){
-		List<URI> uris = Arrays.asList(MODEL_ENTITY.ENTITY_ONE, MODEL_ENTITY.ENTITY_TWO);
+		List<IRI> uris = Arrays.asList(MODEL_ENTITY.ENTITY_ONE, MODEL_ENTITY.ENTITY_TWO);
 		Iterable<ModelEntity> entities = modelEntityRepository.findAll(uris);
 		int count = 0;
 		for(ModelEntity entity : entities){
@@ -410,7 +425,7 @@ public class TestSemanticRepository {
 	}
 	
 	@Test
-	public void testFindByAssociationURI(){
+	public void testFindByAssociationIRI(){
 		List<ModelEntity> entities = modelEntityRepository.findByRelated(MODEL_ENTITY.ENTITY_THREE);
 		assertNotNull(entities);
 		assertEquals(2, entities.size());
@@ -420,7 +435,7 @@ public class TestSemanticRepository {
 	}
 	
 	@Test
-	public void testOneFindByAssociationURI(){
+	public void testOneFindByAssociationIRI(){
 		ModelEntity entity = modelEntityRepository.findOneByRelated(MODEL_ENTITY.ENTITY_THREE);
 		assertNotNull(entity);
 		assertTrue(entity.getUri().equals(MODEL_ENTITY.ENTITY_ONE) || entity.getUri().equals(MODEL_ENTITY.ENTITY_TWO));
@@ -447,7 +462,7 @@ public class TestSemanticRepository {
 	}
 	
 	@Test
-	public void testCountByAssociationURI(){
+	public void testCountByAssociationIRI(){
 		long count = modelEntityRepository.countByRelated(MODEL_ENTITY.ENTITY_THREE);
 		assertEquals(2, count);
 	}

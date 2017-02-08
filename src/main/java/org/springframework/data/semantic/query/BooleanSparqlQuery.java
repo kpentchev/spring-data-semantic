@@ -15,14 +15,14 @@
  */
 package org.springframework.data.semantic.query;
 
-import org.openrdf.OpenRDFException;
-import org.openrdf.query.BooleanQuery;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.parser.ParsedBooleanQuery;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
+import org.eclipse.rdf4j.RDF4JException;
+import org.eclipse.rdf4j.query.BooleanQuery;
+import org.eclipse.rdf4j.query.MalformedQueryException;
+import org.eclipse.rdf4j.query.QueryEvaluationException;
+import org.eclipse.rdf4j.query.QueryLanguage;
+import org.eclipse.rdf4j.query.parser.ParsedBooleanQuery;
+import org.eclipse.rdf4j.repository.RepositoryConnection;
+import org.eclipse.rdf4j.repository.RepositoryException;
 
 
 public class BooleanSparqlQuery extends AbstractSparqlQuery implements BooleanQuery {
@@ -47,7 +47,7 @@ public class BooleanSparqlQuery extends AbstractSparqlQuery implements BooleanQu
 			prePrepare();
 			query = connection.prepareBooleanQuery(QueryLanguage.SPARQL, str);
 			postPrepare();
-		} catch (OpenRDFException e) {
+		} catch (RDF4JException e) {
 			throw new QueryEvaluationException(e);
 		}
 	}

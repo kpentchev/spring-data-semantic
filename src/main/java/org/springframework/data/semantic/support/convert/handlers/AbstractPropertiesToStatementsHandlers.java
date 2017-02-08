@@ -18,8 +18,8 @@ package org.springframework.data.semantic.support.convert.handlers;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.openrdf.model.Resource;
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
+import org.eclipse.rdf4j.model.Resource;
 import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.AssociationHandler;
 import org.springframework.data.mapping.PropertyHandler;
@@ -109,7 +109,7 @@ public abstract class AbstractPropertiesToStatementsHandlers implements Property
 					throw new RequiredPropertyException(persistentEntity.getIdProperty().getValue(entity, persistentEntity.getMappingPolicy()), persistentProperty);
 				}
 				for(Object associatedEntityInstance : associatedEntityInstances){
-					URI associatedResourceId = associatedEntity.getResourceId(associatedEntityInstance);
+					IRI associatedResourceId = associatedEntity.getResourceId(associatedEntityInstance);
 					processAssociationStatement(persistentProperty, associatedResourceId);
 					if(persistentProperty.getMappingPolicy().shouldCascade(Cascade.SAVE) && !statements.getCurrentStatements().subjects().contains(associatedResourceId)){
 						AbstractPropertiesToStatementsHandlers associationHandler = getInstance(statements, associatedEntityInstance, mappingContext);
@@ -120,7 +120,7 @@ public abstract class AbstractPropertiesToStatementsHandlers implements Property
 			}
 			else{
 				SemanticPersistentEntity<Object> associatedEntity = (SemanticPersistentEntity<Object>) mappingContext.getPersistentEntity(persistentProperty.getType());
-				URI associatedResourceId = associatedEntity.getResourceId(value);
+				IRI associatedResourceId = associatedEntity.getResourceId(value);
 				processAssociationStatement(persistentProperty, associatedResourceId);
 				if(persistentProperty.getMappingPolicy().shouldCascade(Cascade.SAVE) && !statements.getCurrentStatements().subjects().contains(associatedResourceId)){
 					AbstractPropertiesToStatementsHandlers associationHandler = getInstance(statements, value, mappingContext);

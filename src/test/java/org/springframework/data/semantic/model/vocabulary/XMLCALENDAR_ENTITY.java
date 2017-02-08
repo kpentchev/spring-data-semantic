@@ -15,15 +15,15 @@
  */
 package org.springframework.data.semantic.model.vocabulary;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.IRI;
 
 public class XMLCALENDAR_ENTITY extends VOCABULARY {
 
     public static final String NAMESPACE = "urn:spring-data-semantic:";
 
-    public static final URI DATE_ONE = create(NAMESPACE, "xmldate:1");
+    public static final IRI DATE_ONE = create(NAMESPACE, "xmldate:1");
 
-    public static final URI YEAR_ONE = create(NAMESPACE, "xmlyear:1");
+    public static final IRI YEAR_ONE = create(NAMESPACE, "xmlyear:1");
 
-    public static final URI YEAR_MONTH_ONE = create(NAMESPACE, "xmlyearmonth:1");
+    public static final IRI YEAR_MONTH_ONE = create(NAMESPACE, "xmlyearmonth:1");
 }

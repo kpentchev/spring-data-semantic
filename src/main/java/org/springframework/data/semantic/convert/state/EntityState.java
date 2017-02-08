@@ -17,6 +17,7 @@ package org.springframework.data.semantic.convert.state;
 
 import java.lang.reflect.Field;
 
+import org.springframework.data.semantic.convert.access.FieldAccessor;
 import org.springframework.data.semantic.mapping.MappingPolicy;
 import org.springframework.data.semantic.mapping.SemanticPersistentEntity;
 import org.springframework.data.semantic.mapping.SemanticPersistentProperty;
